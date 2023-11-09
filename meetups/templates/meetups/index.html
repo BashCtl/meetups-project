@@ -21,7 +21,8 @@
   <h2>Upcoming Meetups</h2>
   <ol>
     {% for meetup in meetups %}
-        <li class="meetup-item">
+        {% include 'meetups/includes/meetup-item.html' %}
+        <!-- <li class="meetup-item">
             <article>
                 <div class="meetup-summary">
                 <div class="meetup-image">
@@ -36,7 +37,7 @@
                 <a href="{% url 'meetup-detail' meetup.slug %}" class="btn">More Details</a>
                 </div>
             </article>
-        </li>
+        </li> -->
     {% endfor %}
   </ol>
 </section>
