@@ -1,22 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from .models import Meetup
 
 # Create your views here.
 
 
 def index(request):
-    meetups = [
-        {'pk': 1, 'title': 'A First Meetup',
-            'location': 'New York', 'slug': 'a-first-meetup'},
-        {'pk': 1, 'title': 'A Second Meetup',
-            'location': 'Paris', 'slug': 'a-second-meetup'}
-    ]
+    meetups = Meetup.objects.all()
     context = {'meetups': meetups}
     return render(request, 'meetups/index.html', context)
 
 
 def meetup_details(request, slug):
-    meetup = {'title': 'A First Meetup',
-              'description': 'This is the first meetup!'}
-    context = {'meetup': meetup}
-    return render(request, 'meetups/meetup-detail.html', context)
+    try:
+        meetup = Meetup.objects.get(slug=slug)
+    
+        context = {'meetup': meetup, 'meetup_found': True}
+        return render(request, 'meetups/meetup-detail.html', context)
+    except Exception as e:
+        return render(request, 'meetups/meetup-detail.html', {'meetup_found': False})
