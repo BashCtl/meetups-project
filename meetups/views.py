@@ -23,7 +23,7 @@ def meetup_details(request, slug):
                 user_email = form.cleaned_data['email']
                 participant, _ = Participant.objects.get_or_create(email=user_email)
                 meetup.participants.add(participant)
-                return redirect('confirm-registration')
+                return redirect('confirm-registration', slug=slug)
         context = {'meetup': meetup, 'meetup_found': True, 'form': form}
         return render(request, 'meetups/meetup-detail.html', context)
     except Exception as e:
@@ -31,5 +31,6 @@ def meetup_details(request, slug):
         return render(request, 'meetups/meetup-detail.html', {'meetup_found': False})
 
 
-def confirm_registration(request):
-    return render(request, 'meetups/registration-success.html')
+def confirm_registration(request, slug):
+    meetup = Meetup.objects.get(slug=slug)
+    return render(request, 'meetups/registration-success.html', {'meetup': meetup})
