@@ -18,13 +18,17 @@ def meetup_details(request, slug):
         if request.method == 'GET':
             form = RegistrationForm()
         else:
-            form = RecursionError(request.POST)
+            form = RegistrationForm(request.POST)
             if form.is_valid():
                 participant = form.save()
                 meetup.participants.add(participant)
-                return redirect
-
+                return redirect('confirm-registration')
         context = {'meetup': meetup, 'meetup_found': True, 'form': form}
         return render(request, 'meetups/meetup-detail.html', context)
     except Exception as e:
+        print(e)
         return render(request, 'meetups/meetup-detail.html', {'meetup_found': False})
+
+
+def confirm_registration(request):
+    return render(request, 'meetups/registration-success.html')
